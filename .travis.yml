@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t douglasmuraoka/docker-fibo-app-client -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run douglasmuraoka/docker-fibo-app-client npm test -- --coverage
+
+after_success:
+  - docker build -t douglasmuraoka/docker-fibo-app-client ./client
+  - docker build -t douglasmuraoka/docker-fibo-app-nginx ./nginx
+  - docker build -t douglasmuraoka/docker-fibo-app-server ./server
+  - docker build -t douglasmuraoka/docker-fibo-app-worker ./worker
+
+  # In order to push images to the Docker Hub, we need to login first
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # Pushes images to Docker Hub
+  - docker push douglasmuraoka/docker-fibo-app-client
+  - docker push douglasmuraoka/docker-fibo-app-nginx
+  - docker push douglasmuraoka/docker-fibo-app-server
+  - docker push douglasmuraoka/docker-fibo-app-worker
