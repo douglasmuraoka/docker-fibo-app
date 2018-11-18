@@ -1,0 +1,26 @@
+# The apiVersion does not have to be the same in every configuration
+# file. We are just saying the we want to use features from this
+# api version, which does not have compatibility issues
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: client-deployment
+spec:
+  # Specifies how many Pods are going to be created with the template
+  replicas: 3
+  selector:
+    matchLabels:
+      component: web
+  # This is the template that is going to be used to create every
+  # single Pod from this Deployment object
+  template:
+    metadata:
+      labels:
+        component: web
+    spec:
+      containers:
+        - name: client
+          image: douglasmuraoka/docker-fibo-app-client
+          ports:
+            - containerPort: 3000
