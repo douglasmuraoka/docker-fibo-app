@@ -17,7 +17,7 @@ before_install:
   - gcloud config set compute/zone southamerica-east1-a
   - gcloud container clusters get-credentials fibo-app-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker build -t douglasmuraoka/react-test -f ./client/Dockerfile.dev
+  - docker build -t douglasmuraoka/react-test -f ./client/Dockerfile.dev ./client
 
 script:
   - docker run douglasmuraoka/react-test npm test -- --coverage
